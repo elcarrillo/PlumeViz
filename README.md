@@ -140,18 +140,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-- Special thanks to the developers of the Plumeria software.
-- Contributions from discussions with Liam Kelly, Kristen Fauria (the PI of the original research that promted the need for this python script), and Tushar Mittal whom contributed to the initial setup of the Plumeria software.  
+- Special thanks to the developer of the Plumeria software, Larry Mastin.
+- Contributions from discussions with Liam Kelly, Kristen Fauria (the PI of the original research that prompted the need for this Python script), and Tushar Mittal.
 
 
 ## Plumeria Software Information
 
-- For more details about the Plumeria software itself, please see the below references.
- 
- - Mastin, L. G. (2007), A user-friendly one-dimensional model for wet volcanic plumes, Geochem. Geophys. Geosyst., 8, Q03014, doi:10.1029/2006GC001455.
-
- - Mastin, L. G. (2014), Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate, J. Geophys. Res. Atmos., 119, 2474–2495, doi:10.1002/2013JD020604.
- - Mastin, L.G., (2024), plumeria_wd software.  U.S. Geological Survey software program.  https://doi.org/10.5066/P1HVRKVN
+- For more details about the Plumeria software, please see the references below.
+    - Mastin, L. G. (2007), A user-friendly one-dimensional model for wet volcanic plumes, Geochem. Geophys. Geosyst., 8, Q03014, doi:10.1029/2006GC001455.
+    - Mastin, L. G. (2014), Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate, J. Geophys. Res. Atmos., 119, 2474–2495, doi:10.1002/2013JD020604.
+    - Mastin, L.G., (2024), plumeria_wd software.  U.S. Geological Survey software program.  https://doi.org/10.5066/P1HVRKVN
  
 ## Contact
 
