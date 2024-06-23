@@ -5,7 +5,7 @@
 PlumeViz features a Plumeria Python wrapper, a tool designed to streamline the batch processing and analysis of 1D volcanic plume simulations using Plumeria software. This wrapper automates the generation of input files, execution of simulations, and post-processing of results, making it easier to manage large sets of simulation runs and analyze their outputs efficiently.
 
 **Auxiliary Modules.** 
-This repository also includes auxiliary scripts for conducting single and bulk runs of Plumeria. These scripts use specific vent diameter values mapped to secondary values, such as maintaining a constant mass flux while varying external water content. Additionally, the scripts can calculate and visualize thermal energy at the vent, demonstrate how density changes with the addition of external water, and visualize ambient temperature and humidity using sample NOAA data.
+This repository also includes auxiliary scripts for conducting single and bulk runs of Plumeria. These scripts use specific vent diameter values mapped to secondary values, such as maintaining a constant mass flux while varying external water content. Additionally, the scripts can calculate and visualize thermal energy at the vent, demonstrate how density changes by adding external water, and visualize ambient temperature and humidity using sample NOAA data.
 
 ## Features
 
@@ -18,11 +18,11 @@ This repository also includes auxiliary scripts for conducting single and bulk r
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/yourusername/plumeria-python-wrapper.git
+    git clone https://github.com/elcarrillo/PlumeViz.git
     cd plumeria-python-wrapper
     ```
 2. **Create Virtual Environment**
-    - It is **recommend** that you do the installation in a virtual envrionment, as to not interfere with dependencies in other projects/workflow.
+    - It is **recommended** that you install in a virtual environment so as not to interfere with dependencies in other projects/workflow.
         ```bash
         python -m venv env
         ```
@@ -84,7 +84,7 @@ Before running the wrapper, you need to configure the parameters for your simula
 ### Running the Script
 
 1. **Generate Input Files**:
-    Modify and run the script `batch_plumeria_input_bulk_MAIN.py` to generate the input files for the Plumeria simulations.
+    Modify and run the script `batch_plumeria_input_bulk_MAIN.py` script to generate the Plumeria simulations' input files.
 
 2. **Run Simulations**:
     Execute the Plumeria simulations using the generated input files. This can be done manually or automated using a batch processing script.
@@ -156,7 +156,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Plumeria Software Information
 
-- For more details about the Plumeria software, please see the references below.
+- Please see the references below for more details about the Plumeria software.
     - Mastin, L. G. (2007), A user-friendly one-dimensional model for wet volcanic plumes, Geochem. Geophys. Geosyst., 8, Q03014, doi:10.1029/2006GC001455.
     - Mastin, L. G. (2014), Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate, J. Geophys. Res. Atmos., 119, 2474–2495, doi:10.1002/2013JD020604.
     - Mastin, L.G., (2024), plumeria_wd software.  U.S. Geological Survey software program.  https://doi.org/10.5066/P1HVRKVN
