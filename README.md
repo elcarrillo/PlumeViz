@@ -121,8 +121,8 @@ if __name__ == "__main__":
 
 ###### sample figures:
 
-![image info](./Plots_TEST/sample.png)
-![image info](./Plots_TEST/sample2.png)
+![single run](Plots_TEST/sample.png)
+![bulk run](Plots_TEST/sample2.png)
 
 
 ## Contributing
