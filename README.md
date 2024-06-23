@@ -19,7 +19,7 @@ This repository also includes auxiliary scripts for conducting single and bulk r
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/elcarrillo/PlumeViz.git
-    cd plumeria-python-wrapper
+    cd PlumeViz
     ```
 2. **Create Virtual Environment**
     - It is **recommended** that you install in a virtual environment so as not to interfere with dependencies in other projects/workflow.
