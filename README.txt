@@ -139,9 +139,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Acknowledgements
 --------------------------------------
-
-- Special thanks to the developers of the Plumeria software.
-- Contributions from discussions with Liam Kelly, Kristen Fauria (the PI of the original research that promted the need for this python script), and Tushar Mittal whom contributed to the initial setup of the Plumeria software.  
+- Special thanks to the developer of the Plumeria software, Larry Mastin.
+- Contributions from discussions with Liam Kelly, Kristen Fauria (the PI of the original research that prompted the need for this Python script), and Tushar Mittal.
 
 
 Plumeria Software Information
