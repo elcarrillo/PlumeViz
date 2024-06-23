@@ -21,15 +21,25 @@ This repository also includes auxiliary scripts for conducting single and bulk r
     git clone https://github.com/yourusername/plumeria-python-wrapper.git
     cd plumeria-python-wrapper
     ```
-
-2. **Install Dependencies**:
+2. **Create Virtual Environment**
+    - It is **recommend** that you do the installation in a virtual envrionment, as to not interfere with dependencies in other projects/workflow.
+        ```bash
+        python -m venv env
+        ```
+        #### On Windows
+        ```bash
+        .\env\Scripts\activate
+        ```
+        #### On macOS/Linux
+        ```bash
+        source env/bin/activate
+        ```
+3. **Install Dependencies**:
     ```bash
     pip install -r requirements.txt
     ```
-    
     - The colormaps library is optional but provides scientific color mapping if desired.
-
-3. **Set Up Plumeria**:
+4. **Set Up Plumeria**:
     - Ensure that the Plumeria software is installed and accessible on your system.
     - Update the `plumeria_loc` variable in the scripts to point to the correct location of the Plumeria executable.
     
