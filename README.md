@@ -5,18 +5,23 @@
 PlumeViz features a Plumeria Python wrapper, a tool designed to streamline the batch processing and analysis of 1D volcanic plume simulations using Plumeria software. This wrapper automates the generation of input files, execution of simulations, and post-processing of results, making it easier to manage large sets of simulation runs and analyze their outputs efficiently.
 
 
-<div style="text-align: center;">
-    <figure>
-        <figcaption>
-            2022 Hunga Eruption Plume<br>
-            <small>GIF source: <a href="https://www.jma.go.jp/jma/kishou/info/coment.html">Japan Meteorological Agency</a></small>
-        </figcaption>
-        <img src="tonga_plume.gif" alt="plume" width="300"/><br>
-    </figure>
-</div>
-
-**Auxiliary Modules.** 
+**Auxiliary Modules.** <br/>
 This repository also includes auxiliary scripts for conducting single and bulk runs of Plumeria. These scripts use specific vent diameter values mapped to secondary values, such as maintaining a constant mass flux while varying external water content. Additionally, the scripts can calculate and visualize thermal energy at the vent, demonstrate how density changes by adding external water, and visualize ambient temperature and humidity using sample NOAA data.
+
+
+
+**Why Plumes Matter**<br/>
+The 2022 Hunga eruption at the Hunga Tonga-Hunga Ha'apai volcano was a significant volcanic event, generating a massive stratospheric plume visible from space. Understanding the dynamics of such plumes is essential for predicting the dispersion of volcanic ash and gases, which have critical implications for aviation safety and climate. Applying a 1D model to this type of eruption provides a starting point for comprehending the complexities of wet volcanic plumes.
+
+
+<figure>
+    <figcaption>2022 Hunga Eruption Plume</figcaption>
+    <img src="tonga_plume.gif" alt="plume" width="300"/>
+    <figcaption><small>GIF source: <a href="https://www.jma.go.jp/jma/kishou/info/coment.html">Japan Meteorological Agency</a></small></figcaption>
+</figure>
+ <br/><br/>
+
+
 
 ## Features
 
