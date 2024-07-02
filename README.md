@@ -4,6 +4,17 @@
 ## Overview
 PlumeViz features a Plumeria Python wrapper, a tool designed to streamline the batch processing and analysis of 1D volcanic plume simulations using Plumeria software. This wrapper automates the generation of input files, execution of simulations, and post-processing of results, making it easier to manage large sets of simulation runs and analyze their outputs efficiently.
 
+
+<div style="text-align: center;">
+    <figure>
+        <figcaption>
+            2022 Hunga Eruption Plume<br>
+            <small>GIF source: <a href="https://www.jma.go.jp/jma/kishou/info/coment.html">Japan Meteorological Agency</a></small>
+        </figcaption>
+        <img src="tonga_plume.gif" alt="plume" width="300"/><br>
+    </figure>
+</div>
+
 **Auxiliary Modules.** 
 This repository also includes auxiliary scripts for conducting single and bulk runs of Plumeria. These scripts use specific vent diameter values mapped to secondary values, such as maintaining a constant mass flux while varying external water content. Additionally, the scripts can calculate and visualize thermal energy at the vent, demonstrate how density changes by adding external water, and visualize ambient temperature and humidity using sample NOAA data.
 
