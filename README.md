@@ -44,26 +44,33 @@ This repository also includes auxiliary scripts for conducting single and bulk r
     - Update the `plumeria_loc` variable in the scripts to point to the correct location of the Plumeria executable.
     
 ## Directory Structure and Contents
-1. Wrappers
-   1. `batch_extract_plumeria_output_MAIN.py`
-   2. `batch_plumeria_input_bulk_MAIN.py`
-   3. `batch_extract_plumeria_output_AUX.py`
-   4. `batch_plumeria_input_bulk_AUX.py`
-   5. `batch_vent_functions.py`
-   6. `plumeria_single_run.py`
-   7. `input_parameters.py`
-
-2. main plots
-    1. `batch_plot_GRID.py`
-    2. `batch_plume_plots.py`
-    3. `batch_dz_plots_all.py`
-3. Sample Plots
-    1. sample.png
-    2. sample2.png
-4. 'How to download and install Plumeria.docx'
-5. README.md -This document
-6. README.txt
-7. requirements.txt
+```
+PlumeViz/
+├── README.md                                    # Project documentation
+├── requirements.txt                             # List of dependencies
+├── README.txt                                   # Additional project documentation
+├── How to download and install Plumeria.docx    # Installation guide for Plumeria
+├── wrappers/                                    # Directory containing wrapper scripts
+│   ├── batch_extract_plumeria_output_MAIN.py
+│   ├── batch_plumeria_input_bulk_MAIN.py
+│   ├── batch_extract_plumeria_output_AUX.py
+│   ├── batch_plumeria_input_bulk_AUX.py
+│   ├── batch_vent_functions.py
+│   ├── plumeria_single_run.py
+│   └── input_parameters.py
+├── main_plots/                                  # Directory containing main plotting scripts
+│   ├── batch_plot_GRID.py
+│   ├── batch_plume_plots.py
+│   └── batch_dz_plots_all.py
+├── sample_plots/                                # Directory containing sample plots
+│   ├── sample.png
+│   └── sample2.png
+└── aux_plots/                                  # Directory containing aux plotting modules
+    ├── 41683870_profile_Yellowstone.txt
+    ├── atmospheric_plots.py
+    ├── density_plots.py
+    └── initial_thermal_energy.py
+```
 
 ## Usage
 
