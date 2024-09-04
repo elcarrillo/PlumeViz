@@ -1,4 +1,5 @@
 # PlumeViz
+## [![DOI](https://zenodo.org/badge/818824604.svg)](https://zenodo.org/doi/10.5281/zenodo.13685923)
 
 
 ## Overview
