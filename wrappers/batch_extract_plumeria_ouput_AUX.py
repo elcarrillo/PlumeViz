@@ -12,59 +12,12 @@ import re
 import os
 
 
-# output_dir       = 'out_u150_w60_t1250_adj/'                             # dir where plumeria output files are stored
-# output_file_path = 'plumeria_data/plume_values_main_u150_t1250_adj.csv'  # dir where data is to be saved
 
-# output_dir = 'out_u_w_t_d_varied_11_02_2023_adj'
-# output_file_path = 'plumeria_data/plume_values_main_u_w_t_d_varied_1102023_adj.csv'  # dir where data is to be saved
-
-# output_dir         = 'out_u_w_t_d_varied_11_07_2023_t1100max_u150max_adj'  # dir where data is read from
-# output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_varied_11072023_t1100max_u150max_adj.csv'  # dir where file we be saved
-
-#output_dir         = 'out_u_w_t_d_varied_11_07_2023_t1100max_u125max_adj'  # dir where data is read from
-#output_dir         = 'out_u_w_t_d_varied_11_07_2023_t1100max_u125max_adj_rr'  # dir where data is read from, from 2/5/24 run
-
-#output_dir  = 'out_u_w_t_d_var_11_07_2023_t1100max_u125max_adj_' ## ran on 2/7/24  ## note plumeria has character limit  ----- MAIN RESULTS
-
-#output_dir  = 'out_u_w_t_d_varied_11_07_2023_large_adj' ## ran on 2/15/24  ## note plumeria has character limit, MAIN RESULTS
-# output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_varied_11072023_large_adj.csv'  # dir where file we be saved, 2/17/2024,
-
-#output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_varied_11072023_main_dz.c sv'  # dir where file we be saved, 3/25/2024,
-
-output_dir  = 'out_u_w_t_d_var_11_07_2023_nan_adj' ## ran on 3/27/24  ## note plumeria has character limit
+output_dir  = 'out_u_w_t_d_var_11_07_2023_nan_adj' ## ran on 3/27/24 
 output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_var_11072023_nan_adj.csv'  # dir where data is stored- 3/27/24
-
-
-
-
-# output_dir         = 'out_w_d_varied_03062024_no_ice_adj'  ## ran on 3/6/2024m HUMID, NO ICE results
-# output_file_path   = 'plumeria_data/plume_values_main_w_d_varied_03062024_no_ice_adj.csv'  # dir where adj data will saved, ran 3.6.2024
-# output_dir         = 'out_w_d_varied_03062024_ice_adj'  ## ran on 3/6/2024m HUMID, ICE results
-# output_file_path   = 'plumeria_data/plume_values_main_w_d_varied_03062024_ice_adj.csv'  # dir where adj data is saved, ran 3.6.2024
-
-# output_dir         = 'out_w_d_varied_03062024_ice_t1100_adj'  ## ran on 3/6/2024m HUMID, ICE results
-# output_file_path   = 'plumeria_data/plume_values_main_w_d_varied_03062024_ice_t1100_adj.csv'  # dir where adj data is saved, ran 3.6.2024
-
-
-#output_dir         = 'test_data'  # dir where data is read from
-#output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_varied_11072023_t1100max_u125max_adj_rr_reduced.csv'  # dir where file we be saved
-# output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_var_11072023_adj.csv'  # dir where file we be saved, 2/7/2024
-
-
-# output_dir = 'out_w_d_varied_11_25_2023_t900_u100_no_ice_adj' # dir where data is read from
-# output_file_path   = 'plumeria_data/plume_values_main_w_d_varied_11252023_t900_u100_adj.csv'  # dir where file we be saved
-
-# output_dir         = 'out_w_d_varied_11_07_2023_t900_u100_adj' # dir where data is read from
-# output_file_path   = 'plumeria_data/plume_values_main_w_d_varied_11072023_t900_u100_adj.csv'  # dir where file we be saved
-
-
 
 ### use for atmospheric profile runs
 def read_if_sounding(run):
-    ###################################################
-    ## WARNING !!!!!!!!!!!     UPDATE this section ####
-    ####################################################
-
     # read plumeria output file, read in 3 sections to simplify data extraction
     values_list = []
     with open(os.path.join(output_dir,run), "r") as output_file:
@@ -91,75 +44,7 @@ def read_if_sounding(run):
     return values_list   
   
 
-# ## for manual input of atmosphere profile
-# def read(run):
-#     """
-#     Read data from a Plumeria output file and extract specific values from different sections.
-#     in:    run (str): The name of the Plumeria output file.
-#     out:   list: A list of extracted values.
-#     """
-#     values_list = []
-#     with open(os.path.join(output_dir, run), "r") as output_file:
-#         lines = output_file.readlines()[7:20]       # data from the input value list at the top of the file
-#         output_file.seek(0)
-#         end_lines = output_file.readlines()[-4:-1]  # data from the output height values at the bottom of the file
-#         output_file.seek(0)
-#         dz_0_line = output_file.readlines()[24]     # data from the dz section of the file, only vent data
 
-#     values_list.extend([float(line.split(':')[1].rstrip()) for line in lines])                        # top of file
-#     values_list.extend([float(re.sub("km", "", line).split('=')[1].rstrip()) for line in end_lines])  # bottom of file 
-#     values_list.extend([float(value) for value in dz_0_line.strip().split()])                         # center of file
-
-#     return values_list
-
-
-# def read(run, expected_length):
-#     """
-#     Try to read and parse specific data from a file, fill missing or unreadable data with NaN.
-
-#     param run: The filename to read from.
-#     param output_dir: The directory where the file is located.
-#     param expected_length: The expected number of data points to extract.
-#     return: A list of extracted values, with NaN for any missing or unreadable data.
-#     """
-#     # Initialize the list with NaNs
-#     values_list = [np.nan] * expected_length
-    
-#     try:
-#         with open(os.path.join(output_dir, run), "r") as output_file:
-#             # attempt to parse specific lines and overwrite NaN values in the list where possible
-#             lines = output_file.readlines()[7:20]  # For the top part of the file
-#             output_file.seek(0)
-#             end_lines = output_file.readlines()[-4:-1]  # For the bottom part of the file
-#             output_file.seek(0)
-#             dz_0_line = output_file.readlines()[24]
-            
-#             for i, line in enumerate(lines):
-#                 try:
-#                     values_list[i] = float(line.split(':')[1].strip())
-#                 except ValueError:
-#                     # if there's a parsing error, leave the corresponding NaN in place
-#                     continue
-
-#             for i, line in enumerate(end_lines, start=len(lines)):
-#                 try:
-#                     values_list[i] = float(re.sub("km", "", line).split('=')[1].strip()) 
-#                 except ValueError:
-#                     # if there's a parsing error, leave the corresponding NaN in place
-#                     continue
-
-#             for i, line in enumerate(dz_0_line):
-#                 try:
-#                     values_list[i] = float(line.strip().split())
-#                 except ValueError:
-#                     # if there's a parsing error, leave the corresponding NaN in place
-#                     continue
-
-#     except Exception as e:
-#         # if there's a file reading error, the function will return the list with NaN values
-#         print(f"Error reading or parsing file {run}: {e}")
-    
-#     return values_list
 def read(run, expected_length):
     """
     Read and parse specific data from a file, filling missing or unreadable data with NaN.
@@ -292,8 +177,6 @@ Temp    = 'T_mix'                          ## temperature of the eruption mixtur
 humid   = 'Relative humidity, %'           ## relative humidity in the atmosphere
 vent_eq = 'vent equivalent init (m)'
 
-# df= df.drop_duplicates(subset=[m_cal, plume_z])
-
 
 rho_0  = 1.292      # ambient air density at the vent, kg/m^3
 g      = 9.81       # earth gravity constant, m/s^2
@@ -331,24 +214,17 @@ df_vent   = df[vent_eq].drop_duplicates(keep = 'first')     # get vent values, n
 vent_init_list = [float(value) for value in df_vent.astype(str).sort_values(ascending=True)]
 
 
-## append dry plume values to each range of heighrs per vent diameter
-
-
-## REBUILD FROM SCRATCH ##
 '''
 grab df per vent init
 grab dry height
 append column of that value 
 '''
 
-### dont need this for the large bulk runs, aka the six plot figure, need to do per set up simulations
+### dont need this for the large bulk runs
 # for diameter in vent_init_list:
-
 #     #df1 = pd.read_csv(file_path)
 #     df  = df.loc[(df['initial velocity (m/s)'] ==75) & (df['magma temperature (c)'] == 700) & (df['mass flux (kg/s)'] <1.5e10)] #& (df[y]) == 0.14] ## change back to u = 100, T = 900
-
 #     if diameter in df['vent equivalent init (m)'].values:                                   ## check if vent value exists in df
-        
 #         df_dry_z = df.loc[(df['vent equivalent init (m)'] == diameter) & (df[ext_w] == 0)]  ## get dry plume heights
 #         #df.sort_values(by=[vent])
 #         if not df_dry_z.empty:                                          # ensure df is not empty
@@ -391,15 +267,8 @@ for temp, velocity in df_filtered[['magma temperature (c)', 'initial velocity (m
 def delta_z(height, dry_height):
     return height - dry_height
 
-# def delta_z_sparks(height, sparks_height):
-#     ''' get the difference between wet plume height and sparks et al calculated height'''
-#     return height - sparks_height
-
 
 df['delta z (km)' ]     = df.apply(lambda a: delta_z(a[plume_z],a[z_dry]), axis=1)     # diffrence in wet plume height relative to dry plume height
-# df['delta z from \
-#    sparks z (km)']     = df.apply(lambda a: delta_z_sparks(a[plume_z],a[sparks]), axis = 1) # diffrence in wet plume height relative to sparks height
-
 
 
 for u in [75,100, 125]:
@@ -429,13 +298,10 @@ for u in [75,100, 125]:
 
 
 def richardson(rho_mix, vent, vel):
-
     rho    = rho_mix 
     v_d    = vent      # vent diamter, m
     u_0    = vel       # vent exit velocity, m/s
-
     red_g = (g*(rho-rho_0))/rho_0
-
     return (red_g * v_d) / (u_0**2)
 
 
@@ -449,33 +315,15 @@ def reduced_gravity(rho_mix):
 deltaz_min = df[del_z].min()
 deltaz_max = df[del_z].max()
 
-# def norm_2slope_z(del_z): ## update equation in latex file 
-#   a,b = [-1,1]
-#   return a + (((del_z - deltaz_min)*(b-a))/(deltaz_max - deltaz_min))
 
-
-
-# def norm_delta_z(delta_z):
-#   delta_z_min = deltaz_min +abs(deltaz_min)
-#   delta_z_max = deltaz_max+abs(deltaz_min)
-#   delta_z     = delta_z +abs(deltaz_min) 
-#   return (delta_z - delta_z_min)/(delta_z_max - delta_z_min)
-
-#df['delta z norm2'] = df.apply(lambda a: norm_2slope_z(a[del_z]), axis=1) 
-#df['delta z norm'] = df.apply(lambda a: norm_delta_z(a[delta_z]), axis=1) 
 df['Ri']            = df.apply(lambda a: richardson(a[rho_mix],a[vent_eq],a[vel]), axis=1)
 df['Thermal Ri']    = df.apply(lambda a: richardson(a[vent_eq],a[vel],a[Temp]), axis=1) 
 df['g prime']       = df.apply(lambda a: reduced_gravity(a[rho_mix]), axis=1) 
-#df['mer eq']        = df.apply(lambda a: mer_eq(a[vent_eq], a[vel]), axis=1) 
-
 
 ###################
 ### output      ###
 ###################
-
-
 df.to_csv(output_file_path, index=False)
-
 print(f"Done! CSV file saved at {output_file_path}")
 
 
