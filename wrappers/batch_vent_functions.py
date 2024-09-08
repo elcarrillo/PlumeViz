@@ -1,16 +1,20 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Author       : Edgar Carrillo
+# Created      : 2023-07-01
+# Last Modified: 2024-09-08
+# Affilation   : Fisk University, Vanderbilt University
+
 import numpy as np
 import random; random.seed(1)
 import math
 import itertools
 
-
-## NOTE create list of values for Velocity, vent diameter, external water added
-# each list except external water should be of same lenght
-
-
-## script to create input list of vent diameter sizes for plumeria software using differnet 
-## distrubutions methos such as random or log increasing values
-
+'''
+Script to create input list of vent diameter sizes for plumeria software using different 
+distributions methods such as random or log increasing values
+'''
 ## create set of random values given a set range
 def random_generate(min_vent_diameter, max_vent_diameter, input_value_total):
     randomlist = []
