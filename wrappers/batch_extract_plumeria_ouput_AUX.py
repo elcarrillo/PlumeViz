@@ -12,7 +12,6 @@ import re
 import os
 
 
-
 output_dir  = 'out_u_w_t_d_var_11_07_2023_nan_adj' ## ran on 3/27/24 
 output_file_path   = 'plumeria_data/plume_values_main_u_w_t_d_var_11072023_nan_adj.csv'  # dir where data is stored- 3/27/24
 
@@ -43,7 +42,6 @@ def read_if_sounding(run):
     
     return values_list   
   
-
 
 def read(run, expected_length):
     """
@@ -103,9 +101,6 @@ def read(run, expected_length):
         print(f"An error occurred while reading or parsing the file {run}: {e}")
 
     return values_list
-
-
-
 
 
 
@@ -212,24 +207,6 @@ df['mass flux (kg/s)'] = df.apply(lambda a: a[m_cal]*(1-a[ext_w]), axis=1)      
 
 df_vent   = df[vent_eq].drop_duplicates(keep = 'first')     # get vent values, no duplicates included
 vent_init_list = [float(value) for value in df_vent.astype(str).sort_values(ascending=True)]
-
-
-'''
-grab df per vent init
-grab dry height
-append column of that value 
-'''
-
-### dont need this for the large bulk runs
-# for diameter in vent_init_list:
-#     #df1 = pd.read_csv(file_path)
-#     df  = df.loc[(df['initial velocity (m/s)'] ==75) & (df['magma temperature (c)'] == 700) & (df['mass flux (kg/s)'] <1.5e10)] #& (df[y]) == 0.14] ## change back to u = 100, T = 900
-#     if diameter in df['vent equivalent init (m)'].values:                                   ## check if vent value exists in df
-#         df_dry_z = df.loc[(df['vent equivalent init (m)'] == diameter) & (df[ext_w] == 0)]  ## get dry plume heights
-#         #df.sort_values(by=[vent])
-#         if not df_dry_z.empty:                                          # ensure df is not empty
-#             dry_z = df_dry_z.iloc[0]['calculated heigth (km)']
-#             df.loc[df['vent equivalent init (m)'] == diameter, 'dry plume height (km)'] = dry_z
 
 
 
