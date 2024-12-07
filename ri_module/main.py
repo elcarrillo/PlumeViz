@@ -1,6 +1,6 @@
-from src.data_processing import load_data, filter_data, reduce_dataframe, ri_borders
-from src.plotting import plot_data
-from src.constants import COLUMNS
+from data_processing import load_data, filter_data, reduce_dataframe, ri_borders
+from plotting import plot_data
+from constants import COLUMNS
 import pandas as pd 
 
 # Define file paths

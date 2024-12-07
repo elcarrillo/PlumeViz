@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
-from src.constants import COLUMNS
+from constants import COLUMNS
 
 
 def load_data(input_file_path):

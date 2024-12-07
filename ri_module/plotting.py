@@ -1,5 +1,5 @@
-from src.data_processing import reduce_dataframe
-from src.constants import COLUMNS, PLOT_PARAMS
+from data_processing import reduce_dataframe
+from constants import COLUMNS, PLOT_PARAMS
 import matplotlib.pyplot as plt
 import seaborn as sns
 
