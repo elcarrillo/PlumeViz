@@ -86,7 +86,7 @@ def plot_sounding_data(df):
     plt.show()
 
 if __name__ == "__main__":
-    sounding_file = '41683870_profile_Yellowstone.txt'  # sample data, update the path to your sounding data file
+    sounding_file = 'data/41683870_profile_Yellowstone.txt'  # sample data, update the path to your sounding data file
     lines = read_sounding_file(sounding_file)
     df = process_sounding_data(lines)
     df = add_relative_humidity(df)
