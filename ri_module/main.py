@@ -4,8 +4,8 @@ from constants import COLUMNS
 import pandas as pd 
 
 # Define file paths
-INPUT_PATH = 'data/input/plumeria_data.csv'
-OUTPUT_PATH = 'data/output/collapse_conditions.csv'
+INPUT_PATH = '../data/input/plumeria_data.csv'
+OUTPUT_PATH = '../data/output/collapse_conditions.csv'
 
 def main():
     """Main script to process data, save output, and generate plots."""
