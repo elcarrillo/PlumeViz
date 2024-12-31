@@ -73,18 +73,18 @@ PlumeViz/
 │   └── output/
 ├── plumeviz/                                    # Directory containing wrapper scripts
 │   ├── plumeria_wrappers/
-│   │    ├── batch_extract_plumeria_output_MAIN.py
-│   │    ├── batch_plumeria_input_bulk_MAIN.py
-│   │    ├── batch_extract_plumeria_output_AUX.py
-│   │    ├── batch_plumeria_input_bulk_AUX.py
-│   │    ├── batch_vent_functions.py
-│   │    ├── plumeria_single_run.py
-│   │    └── input_parameters.py
+│   │   ├── batch_extract_plumeria_output_MAIN.py
+│   │   ├── batch_plumeria_input_bulk_MAIN.py
+│   │   ├── batch_extract_plumeria_output_AUX.py
+│   │   ├── batch_plumeria_input_bulk_AUX.py
+│   │   ├── batch_vent_functions.py
+│   │   ├── plumeria_single_run.py
+│   │   └── input_parameters.py
 │   └── plotting/                                # Directory containing main plotting scripts
 │       ├── batch_plot_GRID.py
 │       ├── batch_plume_plots.py
 │       └── batch_dz_plots_all.py
-├── ri_module/                                  # Directory containing Richardson number calculations/scripts
+├── ri_module/                                   # Directory containing Richardson number calculations/scripts
 │   ├── notebooks/
 │   ├── _init_.py
 │   ├── constants.py
