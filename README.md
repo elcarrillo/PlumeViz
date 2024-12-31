@@ -85,12 +85,12 @@ PlumeViz/
 │       ├── batch_plume_plots.py
 │       └── batch_dz_plots_all.py
 ├── ri_module/                                  # Directory containing Richardson number calculations/scripts
-│       ├── notebooks/
-│       ├── _init_.py
-│       ├── constants.py
-│       ├── data_processing.py
-│       ├── plotting.py
-│       └── main.py
+│   ├── notebooks/
+│   ├── _init_.py
+│   ├── constants.py
+│   ├── data_processing.py
+│   ├── plotting.py
+│   └── main.py
 ├── sample_plots/                                # Directory containing sample plots
 │   ├── sample.png
 │   └── sample2.png
