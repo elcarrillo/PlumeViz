@@ -67,23 +67,35 @@ PlumeViz/
 ├── requirements.txt                             # List of dependencies
 ├── README.txt                                   # Additional project documentation
 ├── How to download and install Plumeria.docx    # Installation guide for Plumeria
-├── wrappers/                                    # Directory containing wrapper scripts
-│   ├── batch_extract_plumeria_output_MAIN.py
-│   ├── batch_plumeria_input_bulk_MAIN.py
-│   ├── batch_extract_plumeria_output_AUX.py
-│   ├── batch_plumeria_input_bulk_AUX.py
-│   ├── batch_vent_functions.py
-│   ├── plumeria_single_run.py
-│   └── input_parameters.py
-├── main_plots/                                  # Directory containing main plotting scripts
-│   ├── batch_plot_GRID.py
-│   ├── batch_plume_plots.py
-│   └── batch_dz_plots_all.py
+├── LICENSE                                      # software license
+├── data/                                        # Directory containing wrapper scripts
+│   ├── input/
+│   └── output/
+├── plumeviz/                                    # Directory containing wrapper scripts
+│   ├── plumeria_wrappers/
+│   │    ├── batch_extract_plumeria_output_MAIN.py
+│   │    ├── batch_plumeria_input_bulk_MAIN.py
+│   │    ├── batch_extract_plumeria_output_AUX.py
+│   │    ├── batch_plumeria_input_bulk_AUX.py
+│   │    ├── batch_vent_functions.py
+│   │    ├── plumeria_single_run.py
+│   │    └── input_parameters.py
+│   └── plotting/                                # Directory containing main plotting scripts
+│       ├── batch_plot_GRID.py
+│       ├── batch_plume_plots.py
+│       └── batch_dz_plots_all.py
+├── ri_module/                                  # Directory containing Richardson number calculations/scripts
+│       ├── notebooks/
+│       ├── _init_.py
+│       ├── constants.py
+│       ├── data_processing.py
+│       ├── plotting.py
+│       └── main.py
 ├── sample_plots/                                # Directory containing sample plots
 │   ├── sample.png
 │   └── sample2.png
-└── aux_plots/                                  # Directory containing aux plotting modules
-    ├── 41683870_profile_Yellowstone.txt
+└── aux_plots/                                   # Directory containing aux plotting modules
+    ├── data/
     ├── atmospheric_plots.py
     ├── density_plots.py
     └── initial_thermal_energy.py
