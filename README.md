@@ -10,7 +10,7 @@ If you use **PlumeViz** in your research, please cite both the software archive 
 
 **Associated paper**
 
-[![DOI](https://zenodo.org/badge/DOI/10.30909/vol/ycra8102.svg)](https://doi.org/10.30909/vol/ycra8102)
+[![DOI](https://img.shields.io/badge/DOI-10.30909%2Fvol%2Fycra8102-blue)](https://doi.org/10.30909/vol/ycra8102)
 
 Carrillo, E. L., Fauria, K. E., Mittal, T., & Mastin, L. G. (2026). *Effects of external water on volcanic column height and collapse*. **Volcanica, 9**(1), 175–186. https://doi.org/10.30909/vol/ycra8102
 
