@@ -1,6 +1,18 @@
 # PlumeViz
-## [![DOI](https://zenodo.org/badge/818824604.svg)](https://zenodo.org/doi/10.5281/zenodo.13685923)
 
+## Citation
+
+If you use **PlumeViz** in your research, please cite both the software archive and the associated paper.
+
+**Software**
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13685923.svg)](https://doi.org/10.5281/zenodo.13685923)
+
+**Associated paper**
+
+[![DOI](https://zenodo.org/badge/DOI/10.30909/vol/ycra8102.svg)](https://doi.org/10.30909/vol/ycra8102)
+
+Carrillo, E. L., Fauria, K. E., Mittal, T., & Mastin, L. G. (2026). *Effects of external water on volcanic column height and collapse*. **Volcanica, 9**(1), 175–186. https://doi.org/10.30909/vol/ycra8102
 
 ## Overview
 PlumeViz features a Plumeria Python wrapper, a tool designed to streamline the batch processing and analysis of 1D volcanic plume simulations using Plumeria software. This wrapper automates the generation of input files, execution of simulations, and post-processing of results, making it easier to manage large sets of simulation runs and analyze their outputs efficiently.
