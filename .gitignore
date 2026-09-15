@@ -6,3 +6,27 @@ __pycache__/
 **/__pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Fortran build artifacts
+*.o
+*.mod
+
+# Generated Plumeria files
+inp_*/
+out_*/
+output/
+outputs/
