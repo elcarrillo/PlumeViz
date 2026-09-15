@@ -1,6 +1,26 @@
 # PlumeViz
 
-[![DOI](https://zenodo.org/badge/818824604.svg)](https://zenodo.org/doi/10.5281/zenodo.13685923)
+[![DOI](https://zenodo.org/badge/818824604.svg)](https://doi.org/10.5281/zenodo.13685923)
+
+<div align="center">
+
+### How to Cite
+
+If you use **PlumeViz** directly in research, please cite the archived software release:
+
+**Carrillo, E. L. (2024). _PlumeViz_. Zenodo.**  
+https://doi.org/10.5281/zenodo.13685923
+
+PlumeViz was developed and used in support of:
+
+**Carrillo, E. L., Fauria, K. E., Mittal, T., & Mastin, L. G. (2026).**  
+_Effects of Vent-Sourced External Water on Volcanic Column Height and Collapse._  
+_Volcanica_, 9.  
+https://doi.org/10.30909/vol/ycra8102
+
+</div>
+
+---
 
 ## Overview
 
@@ -282,23 +302,36 @@ Real-engine integration tests are marked separately:
 python -m pytest -v -m integration
 ```
 
-## Plumeria
+## References
 
-PlumeViz is a wrapper around the Plumeria volcanic plume model developed by Larry G. Mastin of the U.S. Geological Survey.
+### PlumeViz
 
-For details about the underlying model, see:
+If you use PlumeViz directly in research, please cite the archived software release:
 
-* Mastin, L. G. (2007), A user-friendly one-dimensional model for wet volcanic plumes, *Geochemistry, Geophysics, Geosystems*, 8, Q03014. [https://doi.org/10.1029/2006GC001455](https://doi.org/10.1029/2006GC001455)
-* Mastin, L. G. (2014), Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate, *Journal of Geophysical Research: Atmospheres*, 119, 2474–2495. [https://doi.org/10.1002/2013JD020604](https://doi.org/10.1002/2013JD020604)
-* Mastin, L. G. (2024), *plumeria_wd software*. U.S. Geological Survey software program. [https://doi.org/10.5066/P1HVRKVN](https://doi.org/10.5066/P1HVRKVN)
+Carrillo, E. L. (2024). *PlumeViz*. Zenodo.  
+https://doi.org/10.5281/zenodo.13685923
 
-## Citation
+If your work also builds on the methodology or scientific results described in the associated study, please cite:
 
-If you use PlumeViz in research, please cite the archived release:
-
-[https://doi.org/10.5281/zenodo.13685923](https://doi.org/10.5281/zenodo.13685923)
+Carrillo, E. L., Fauria, K. E., Mittal, T., & Mastin, L. G. (2026).  
+*Effects of Vent-Sourced External Water on Volcanic Column Height and Collapse.*  
+*Volcanica*, 9.  
+https://doi.org/10.30909/vol/ycra8102
 
 Please also cite the appropriate Plumeria publications and software release.
+
+### Plumeria
+
+Mastin, L. G. (2007). A user-friendly one-dimensional model for wet volcanic plumes.  
+*Geochemistry, Geophysics, Geosystems*, 8, Q03014.  
+https://doi.org/10.1029/2006GC001455
+
+Mastin, L. G. (2014). Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate.  
+*Journal of Geophysical Research: Atmospheres*, 119, 2474–2495.  
+https://doi.org/10.1002/2013JD020604
+
+Mastin, L. G. (2024). *plumeria_wd software*. U.S. Geological Survey software program.  
+https://doi.org/10.5066/P1HVRKVN
 
 ## License
 
