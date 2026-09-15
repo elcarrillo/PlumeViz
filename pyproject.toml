@@ -22,6 +22,10 @@ dev = [
     "pytest>=8",
 ]
 
+web = [
+    "streamlit>=1.39",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
