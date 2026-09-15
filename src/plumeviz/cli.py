@@ -12,7 +12,11 @@ from plumeviz.engine.manager import (
 )
 from plumeviz.io.input_file import PlumeriaInput
 from plumeviz.simulation import run_simulation
-from plumeviz.sweep import export_sweep_csv, run_sweep
+from plumeviz.sweep import (
+    export_sweep_csv,
+    run_sweep,
+    run_template_sweep,
+)
 
 
 def _add_input_arguments(
@@ -245,19 +249,28 @@ def _sweep(args: argparse.Namespace) -> int:
 
     workdir = args.workdir.expanduser()
 
-    config = _config_from_args(
-        args,
-        workdir / "unused.txt",
-        parameters,
-    )
+    if args.input is not None:
+        results = run_template_sweep(
+            template_path=args.input,
+            parameters=parameters,
+            executable=executable,
+            workdir=workdir,
+            timeout=args.timeout,
+        )
+    else:
+        config = _config_from_args(
+            args,
+            workdir / "unused.txt",
+            parameters,
+        )
 
-    results = run_sweep(
-        base_config=config,
-        parameters=parameters,
-        executable=executable,
-        workdir=workdir,
-        timeout=args.timeout,
-    )
+        results = run_sweep(
+            base_config=config,
+            parameters=parameters,
+            executable=executable,
+            workdir=workdir,
+            timeout=args.timeout,
+        )
 
     print(f"runs: {len(results)}")
     print()
@@ -345,6 +358,11 @@ def build_parser() -> argparse.ArgumentParser:
     _add_input_arguments(
         sweep_parser,
         required_core=False,
+    )
+    sweep_parser.add_argument(
+        "--input",
+        type=Path,
+        help="existing plumeria input file to use as the sweep template",
     )
     sweep_parser.add_argument(
         "--vary",
