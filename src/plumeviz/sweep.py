@@ -85,3 +85,17 @@ def run_sweep(
         rows.append(row)
 
     return pd.DataFrame(rows)
+
+
+def export_sweep_csv(
+    results: pd.DataFrame,
+    path: str | Path,
+) -> Path:
+    """Write sweep results to CSV and return the output path."""
+
+    path = Path(path).expanduser()
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    results.to_csv(path, index=False)
+
+    return path
