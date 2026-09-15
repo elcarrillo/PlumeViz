@@ -1,0 +1,87 @@
+from __future__ import annotations
+
+from dataclasses import fields, replace
+from itertools import product
+from pathlib import Path
+from typing import Iterable, Any
+
+import pandas as pd
+
+from plumeviz.io.input_file import PlumeriaInput
+from plumeviz.simulation import run_simulation
+
+
+def run_sweep(
+    base_config: PlumeriaInput,
+    parameters: dict[str, Iterable[Any]],
+    executable: str | Path,
+    workdir: str | Path,
+    *,
+    timeout: float = 1.0,
+) -> pd.DataFrame:
+    """
+    Run a Cartesian parameter sweep of Plumeria simulations.
+
+    Each simulation gets its own directory containing:
+        input.inp
+        output.txt
+
+    Returns one DataFrame row per simulation.
+    """
+    workdir = Path(workdir).expanduser()
+    workdir.mkdir(parents=True, exist_ok=True)
+
+    valid_fields = {field.name for field in fields(PlumeriaInput)}
+    valid_fields.remove("output_path")
+
+    unknown = set(parameters) - valid_fields
+
+    if unknown:
+        raise ValueError(
+            "Unknown PlumeriaInput parameter(s): "
+            + ", ".join(sorted(unknown))
+        )
+
+    names = list(parameters)
+    values = [list(parameters[name]) for name in names]
+
+    if any(len(value_list) == 0 for value_list in values):
+        raise ValueError("Sweep parameter lists cannot be empty.")
+
+    rows: list[dict[str, Any]] = []
+
+    for index, combination in enumerate(product(*values), start=1):
+        varied = dict(zip(names, combination))
+
+        run_id = f"run_{index:06d}"
+        run_dir = workdir / run_id
+
+        input_path = run_dir / "input.inp"
+        output_path = run_dir / "output.txt"
+
+        config = replace(
+            base_config,
+            output_path=output_path,
+            **varied,
+        )
+
+        result = run_simulation(
+            config,
+            executable,
+            input_path,
+            timeout=timeout,
+        )
+
+        row: dict[str, Any] = {
+            "run_id": run_id,
+            **varied,
+            "status": result.run.status,
+            "returncode": result.run.returncode,
+            "input_path": str(input_path),
+            "output_path": str(output_path),
+        }
+
+        row.update(result.values)
+        rows.append(row)
+
+    return pd.DataFrame(rows)
