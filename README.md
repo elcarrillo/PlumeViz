@@ -1,214 +1,315 @@
 # PlumeViz
 
-## Citation
-
-If you use **PlumeViz** in your research, please cite both the software archive and the associated paper.
-
-**Software**
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13685923.svg)](https://doi.org/10.5281/zenodo.13685923)
-
-**Associated paper**
-
-[![DOI](https://img.shields.io/badge/DOI-10.30909%2Fvol%2Fycra8102-blue)](https://doi.org/10.30909/vol/ycra8102)
-
-Carrillo, E. L., Fauria, K. E., Mittal, T., & Mastin, L. G. (2026). *Effects of external water on volcanic column height and collapse*. **Volcanica, 9**(1), 175–186. https://doi.org/10.30909/vol/ycra8102
+[![DOI](https://zenodo.org/badge/818824604.svg)](https://zenodo.org/doi/10.5281/zenodo.13685923)
 
 ## Overview
-PlumeViz features a Plumeria Python wrapper, a tool designed to streamline the batch processing and analysis of 1D volcanic plume simulations using Plumeria software. This wrapper automates the generation of input files, execution of simulations, and post-processing of results, making it easier to manage large sets of simulation runs and analyze their outputs efficiently.
 
+PlumeViz is a Python interface for running, processing, and visualizing one-dimensional volcanic plume simulations with the USGS **Plumeria** model.
 
-**Auxiliary Modules.** <br/>
-This repository also includes auxiliary scripts for conducting single and bulk runs of Plumeria. These scripts use specific vent diameter values mapped to secondary values, such as maintaining a constant mass flux while varying external water content. Additionally, the scripts can calculate and visualize thermal energy at the vent, demonstrate how density changes by adding external water, and visualize ambient temperature and humidity using sample NOAA data.
+The current version provides:
 
+- a Python API for constructing and running Plumeria simulations
+- a command-line interface for single runs and parameter sweeps
+- support for modifying and running existing Plumeria input files
+- automatic parsing of Plumeria summary and vertical-profile output
+- profile plotting utilities
+- a lightweight web interface for single runs and small comparison sweeps
+- managed installation and execution of a supported Plumeria engine
 
+PlumeViz is designed to make Plumeria easier to use without replacing the underlying model. The core package handles input generation, model execution, output parsing, parameter studies, and visualization while preserving direct access to Plumeria input and output files.
 
-**Why Plumes Matter**<br/>
-The 2022 Hunga eruption at the Hunga Tonga-Hunga Ha'apai volcano was a significant volcanic event, generating a massive stratospheric plume visible from space. Understanding the dynamics of such plumes is essential for predicting the dispersion of volcanic ash and gases, which have critical implications for aviation safety and climate. Applying a 1D model to this type of eruption provides a starting point for comprehending the complexities of wet volcanic plumes.
+## Why Plumes Matter
 
+Volcanic plumes transport ash, gases, water, and heat through the atmosphere. Their dynamics influence eruption hazards, aviation safety, atmospheric transport, and the climatic effects of large eruptions.
+
+One-dimensional plume models provide an efficient way to explore how vent conditions, atmospheric properties, entrainment, and external water affect plume evolution and maximum height.
+
+The 2022 Hunga eruption at Hunga Tonga-Hunga Ha'apai provides an especially striking example of a water-rich volcanic plume reaching the stratosphere.
 
 <figure>
-    <figcaption>2022 Hunga Eruption Plume</figcaption>
-    <img src="tonga_plume.gif" alt="plume" width="300"/>
-    <figcaption><small>GIF source: <a href="https://www.jma.go.jp/jma/kishou/info/coment.html">Japan Meteorological Agency</a></small></figcaption>
+    <figcaption>2022 Hunga eruption plume</figcaption>
+    <img src="tonga_plume.gif" alt="2022 Hunga eruption plume" width="300"/>
+    <figcaption>
+        <small>
+            GIF source:
+            <a href="https://www.jma.go.jp/jma/kishou/info/coment.html">
+                Japan Meteorological Agency
+            </a>
+        </small>
+    </figcaption>
 </figure>
- <br/><br/>
-
-
 
 ## Features
 
-- **Batch Processing**: Automate the generation and execution of multiple Plumeria simulations.
-- **Data Analysis**: Extract and analyze key parameters from the simulation outputs.
-- **Plotting Utilities**: Generate various plots to visualize the simulation results.
-- **Flexible Configuration**: Easily adjust simulation parameters and directories.
+### Single simulations
+
+Generate a Plumeria input file, execute the model, parse the output, and inspect the resulting plume solution.
+
+### Parameter sweeps
+
+Run Cartesian parameter sweeps from the command line or Python API and export the resulting simulation summaries to CSV.
+
+### Existing Plumeria input files
+
+PlumeViz can modify selected parameters in an existing Plumeria input file while preserving the rest of the file. This allows existing Plumeria configurations, including files using external atmospheric data, to remain usable.
+
+
+### Web interface
+
+The included web interface provides a deliberately lightweight interface for interactive Plumeria use.
+
+It supports:
+
+- single simulations with vertical-profile plots
+- comparison sweeps varying one parameter
+- up to 10 simulations per comparison
+- layered plume-profile plots
+- plume-height comparisons
+- CSV export
+
+Larger parameter studies are better handled through the command-line interface or Python API.
 
 ## Installation
 
-1. **Clone the Repository**:
-    ```bash
-    git clone https://github.com/elcarrillo/PlumeViz.git
-    cd PlumeViz
-    ```
-2. **Create Virtual Environment**
-    - It is **recommended** that you install in a virtual environment so as not to interfere with dependencies in other projects/workflow.
-        ```bash
-        python -m venv env
-        ```
-        #### On Windows
-        ```bash
-        .\env\Scripts\activate
-        ```
-        #### On macOS/Linux
-        ```bash
-        source env/bin/activate
-        ```
-3. **Install Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-    - The colormaps library is optional but provides scientific color mapping if desired.
-4. **Set Up Plumeria**:
-    - Ensure that the Plumeria software is installed and accessible on your system.
-    - Update the `plumeria_loc` variable in the scripts to point to the correct location of the Plumeria executable.
-    
-## Directory Structure and Contents
-```
-PlumeViz/
-├── README.md                                    # Project documentation
-├── requirements.txt                             # List of dependencies
-├── README.txt                                   # Additional project documentation
-├── How to download and install Plumeria.docx    # Installation guide for Plumeria
-├── LICENSE                                      # software license
-├── data/                                        # Directory containing wrapper scripts
-│   ├── input/
-│   └── output/
-├── plumeviz/                                    # Directory containing wrapper scripts
-│   ├── plumeria_wrappers/
-│   │   ├── batch_extract_plumeria_output_MAIN.py
-│   │   ├── batch_plumeria_input_bulk_MAIN.py
-│   │   ├── batch_extract_plumeria_output_AUX.py
-│   │   ├── batch_plumeria_input_bulk_AUX.py
-│   │   ├── batch_vent_functions.py
-│   │   ├── plumeria_single_run.py
-│   │   └── input_parameters.py
-│   └── plotting/                                # Directory containing main plotting scripts
-│       ├── batch_plot_GRID.py
-│       ├── batch_plume_plots.py
-│       └── batch_dz_plots_all.py
-├── ri_module/                                   # Directory containing Richardson number calculations/scripts
-│   ├── notebooks/
-│   ├── _init_.py
-│   ├── constants.py
-│   ├── data_processing.py
-│   ├── plotting.py
-│   └── main.py
-├── sample_plots/                                # Directory containing sample plots
-│   ├── sample.png
-│   └── sample2.png
-└── aux_plots/                                   # Directory containing aux plotting modules
-    ├── data/
-    ├── atmospheric_plots.py
-    ├── density_plots.py
-    └── initial_thermal_energy.py
+Clone the repository:
+
+```bash
+git clone https://github.com/elcarrillo/PlumeViz.git
+cd PlumeViz
+````
+
+Create and activate a virtual environment:
+
+### macOS/Linux
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-## Usage
+### Windows
 
-### Configuration
+```bash
+python -m venv .venv
+.\.venv\Scripts\activate
+```
 
-Before running the wrapper, you need to configure the parameters for your simulations. The main configuration is done in the `main` function of the script:
+Install PlumeViz:
 
-- **Mass Fraction of Added Water**: `mass_frac_add_water_list`
-- **Magma Temperature List**: `magma_temp_list`
-- **Vent Velocity List**: `vent_vel_list`
-- **Humidity List**: `humid_list`
-- **Vent Diameter**: `min_vent_diameter`, `max_vent_diameter`, `interval_size`
-- **Gas Fraction**: `gas_frac`
-- **Sounding Data File**: `line11`
-- **Directory Locations**: `dir_loc`, `out_loc`
-- **CSV Path**: `csv_path`
+```bash
+python -m pip install -e .
+```
 
-### Running the Script
+For the web interface:
 
-1. **Generate Input Files**:
-    Modify and run the script `batch_plumeria_input_bulk_MAIN.py` script to generate the Plumeria simulations' input files.
+```bash
+python -m pip install -e '.[web]'
+```
 
-2. **Run Simulations**:
-    Execute the Plumeria simulations using the generated input files. This can be done manually or automated using a batch processing script.
+For development and testing:
 
-3. **Process Outputs**:
-    Use the `batch_extract_plumeria_output_MAIN.py` or similar scripts to process the simulation outputs and extract relevant data.
+```bash
+python -m pip install -e '.[dev]'
+```
 
-4. **Analyze and Plot Results**:
-    Utilize the provided plotting scripts in **\main plots** directory to visualize the results of your simulations.
-    
-### Example
+PlumeViz requires Python 3.10 or newer.
 
-Here is a basic example of how to configure (using `input_parameters.py`) and run the wrapper:
+## Plumeria Engine
+
+PlumeViz can manage a supported copy of the USGS Plumeria model.
+
+Check the current engine status:
+
+```bash
+plumeviz engine status
+```
+
+Install the managed Plumeria engine:
+
+```bash
+plumeviz engine install
+```
+
+The current managed engine targets Plumeria 3.0.0.
+
+Building the managed engine requires the standard Plumeria build tools, including `make` and `gfortran`.
+
+PlumeViz can also use an explicitly supplied Plumeria executable instead of the managed engine.
+
+## Command-Line Interface
+
+### Single Run
+
+A basic simulation can be run with:
+
+```bash
+plumeviz run \
+    --vent-diameter 10 \
+    --vent-velocity 100 \
+    --magma-temperature 900 \
+    --added-water-fraction 0.2 \
+    --workdir results/example_run
+```
+
+The command writes the Plumeria input and output files and reports the parsed simulation results.
+
+### Parameter Sweep
+
+Multiple parameter values can be explored with:
+
+```bash
+plumeviz sweep \
+    --vary vent_velocity=75,100,125 \
+    --vary added_water_fraction=0,0.1,0.2 \
+    --workdir results/example_sweep \
+    --csv results/example_sweep/results.csv
+```
+
+PlumeViz evaluates the Cartesian product of the supplied parameter values.
+
+### Existing Input File
+
+An existing Plumeria input file can also be used as the basis of a sweep:
+
+```bash
+plumeviz sweep \
+    --input path/to/input.inp \
+    --vary vent_velocity=75,100,125 \
+    --vary added_water_fraction=0,0.1,0.2 \
+    --workdir results/template_sweep \
+    --csv results/template_sweep/results.csv
+```
+
+Only the requested parameters and output location are modified. Other records in the original input file are preserved.
+
+## Web Interface
+
+Install the web dependencies:
+
+```bash
+python -m pip install -e '.[web]'
+```
+
+Launch PlumeViz:
+
+```bash
+streamlit run web/app.py
+```
+
+The application will open in a local web browser.
+
+The web interface is intended for interactive exploration rather than large batch studies. Single simulations produce full vertical-profile plots, while comparison sweeps can overlay up to 10 plume solutions.
+
+## Python API
+
+A simulation can also be constructed directly in Python:
 
 ```python
-def main():
-    # Configuration parameters
-    mass_frac_add_water_list = [float(a / 100) for a in range(0, 21)]
-    magma_temp_list = [900]
-    vent_vel_list = [100]
-    humid_list = [0]
+from plumeviz.engine.manager import find_plumeria_executable
+from plumeviz.io.input_file import PlumeriaInput
+from plumeviz.simulation import run_simulation
 
-    min_vent_diameter = 1
-    max_vent_diameter = 44000
-    interval_size = 6
 
-    vent_diameter_list = binary_log_input(min_vent_diameter, max_vent_diameter, interval_size)
+executable = find_plumeria_executable()
 
-    gas_frac = 0.90
-    line11 = 'NOAA_sounding_file.txt'
+config = PlumeriaInput(
+    output_path="results/output.txt",
+    vent_diameter=10,
+    vent_velocity=100,
+    magma_temperature=900,
+    added_water_fraction=0.2,
+)
 
-    dir_loc = 'plumeria_input_dir'
-    out_loc = 'plumeria_output_dir'
-    csv_path = 'plumeria_data.csv' ## extracted data will be saved here
+result = run_simulation(
+    config=config,
+    executable=executable,
+    input_path="results/input.inp",
+)
 
-    plumeria_loc = '/Users/carrile/plume_fort_v2.3.1/plumeria'
-
-    os.makedirs(dir_loc, exist_ok=True)
-    os.makedirs(out_loc, exist_ok=True)
-
-if __name__ == "__main__":
-    main()
+print(result.values)
 ```
 
-###### sample figures:
+The full vertical plume profile can be parsed separately:
 
-![single run](sample%20plots/sample.png)
-![bulk run](sample%20plots/sample2.png)
+```python
+from plumeviz.io.profile_parser import parse_plumeria_profile
 
-## Contributing
 
-If you would like to contribute to the development of this wrapper, please follow these steps:
+profile = parse_plumeria_profile(
+    "results/output.txt"
+)
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a new Pull Request.
+print(profile.head())
+```
+
+## Core Repository Structure
+
+```text
+PlumeViz/
+├── src/
+│   └── plumeviz/
+│       ├── engine/
+│       ├── io/
+│       ├── plotting/
+│       ├── cli.py
+│       ├── parameters.py
+│       ├── simulation.py
+│       └── sweep.py
+├── web/
+│   └── app.py
+├── tests/
+├── legacy/
+├── pyproject.toml
+├── README.md
+└── LICENSE
+```
+
+The current PlumeViz package is contained in `src/plumeviz`.
+
+Older PlumeViz code retained for historical reference is stored under `legacy/` and is not part of the current package API.
+
+## Testing
+
+Run the standard test suite with:
+
+```bash
+python -m pytest -v
+```
+
+Real-engine integration tests are marked separately:
+
+```bash
+python -m pytest -v -m integration
+```
+
+## Plumeria
+
+PlumeViz is a wrapper around the Plumeria volcanic plume model developed by Larry G. Mastin of the U.S. Geological Survey.
+
+For details about the underlying model, see:
+
+* Mastin, L. G. (2007), A user-friendly one-dimensional model for wet volcanic plumes, *Geochemistry, Geophysics, Geosystems*, 8, Q03014. [https://doi.org/10.1029/2006GC001455](https://doi.org/10.1029/2006GC001455)
+* Mastin, L. G. (2014), Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate, *Journal of Geophysical Research: Atmospheres*, 119, 2474–2495. [https://doi.org/10.1002/2013JD020604](https://doi.org/10.1002/2013JD020604)
+* Mastin, L. G. (2024), *plumeria_wd software*. U.S. Geological Survey software program. [https://doi.org/10.5066/P1HVRKVN](https://doi.org/10.5066/P1HVRKVN)
+
+## Citation
+
+If you use PlumeViz in research, please cite the archived release:
+
+[https://doi.org/10.5281/zenodo.13685923](https://doi.org/10.5281/zenodo.13685923)
+
+Please also cite the appropriate Plumeria publications and software release.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+PlumeViz is distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgements
 
-- Special thanks to the developer of the Plumeria software, Larry Mastin.
-- Contributions from discussions with Liam Kelly, Kristen Fauria (the PI of the original research that prompted the need for this Python script), and Tushar Mittal.
+Special thanks to Larry Mastin for developing and maintaining Plumeria.
 
+The development of the original PlumeViz workflow was informed by research and discussions with Liam Kelly, Kristen Fauria, and Tushar Mittal.
 
-## Plumeria Software Information
-
-- Please see the references below for more details about the Plumeria software.
-    - Mastin, L. G. (2007), A user-friendly one-dimensional model for wet volcanic plumes, Geochem. Geophys. Geosyst., 8, Q03014, doi:10.1029/2006GC001455.
-    - Mastin, L. G. (2014), Testing the accuracy of a 1-D volcanic plume model in estimating mass eruption rate, J. Geophys. Res. Atmos., 119, 2474–2495, doi:10.1002/2013JD020604.
-    - Mastin, L.G., (2024), plumeria_wd software.  U.S. Geological Survey software program.  https://doi.org/10.5066/P1HVRKVN
- 
 ## Contact
 
-For questions or support, please contact Edgar Carrillo at [edgarc.ec@gmail.com].
+For questions about PlumeViz, contact Edgar Carrillo at [edgarc.ec@gmail.com](mailto:edgarc.ec@gmail.com).
