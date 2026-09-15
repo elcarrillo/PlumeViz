@@ -44,15 +44,17 @@ BUILD_RECIPES = {
 
 def find_plumeria_executable(
     executable: str | Path | None = None,
+    version: str = PLUMERIA_VERSION,
 ) -> Path | None:
     """
     Locate a usable Plumeria executable.
 
     Search order:
-      1. Explicit path supplied by the caller.
-      2. Known executable names available on PATH.
+      1 Explicit path supplied by the caller.
+      2 PlumeViz-managed executable for the requested version.
+      3 Known executable names available on PATH.
 
-    Returns None when no executable can be found.
+    returns none when no executable can be found.
     """
 
     if executable is not None:
@@ -62,6 +64,17 @@ def find_plumeria_executable(
             return path.resolve()
 
         return None
+
+    recipe = BUILD_RECIPES.get(version)
+
+    if recipe is not None:
+        managed = (
+            managed_binary_directory(version)
+            / recipe["executable"]
+        )
+
+        if managed.is_file():
+            return managed.resolve()
 
     for name in DEFAULT_EXECUTABLE_NAMES:
         found = shutil.which(name)
