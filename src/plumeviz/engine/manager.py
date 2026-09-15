@@ -21,6 +21,16 @@ DEFAULT_EXECUTABLE_NAMES = (
 
 _BAD_FORMAT_FRAGMENT = "e12.4', kg/s'"
 _FIXED_FORMAT_FRAGMENT = "e12.4,' kg/s'"
+_INPUT_BUFFER_BAD = "infile*60, yesno*3"
+_INPUT_BUFFER_FIXED = "infile*1024, yesno*3"
+_OUTPUT_BUFFER_BAD = "character(len=80)  ::  OutFileName"
+_OUTPUT_BUFFER_FIXED = "character(len=1024)  ::  OutFileName"
+_METFILE_BUFFER_BAD = "character(len=80)  :: Metfile"
+_METFILE_BUFFER_FIXED = "character(len=1024)  :: Metfile"
+_OUTPUT_READ_BAD = "read(10,'(a80)') OutFileName"
+_OUTPUT_READ_FIXED = "read(10,'(a1024)') OutFileName"
+_METFILE_READ_BAD = "read (10,'(a80)') Metfile"
+_METFILE_READ_FIXED = "read (10,'(a1024)') Metfile"
 
 
 COMPATIBILITY_PATCHES = {
@@ -242,6 +252,109 @@ def patch_plumeria_source(
 
     if changed:
         main_f90.write_text(text)
+
+    if version == "3.0.0":
+        read_input = source_dir / "read_input.f90"
+
+        if not read_input.is_file():
+            raise RuntimeError(
+                f"read_input.f90 not found for Plumeria {version}"
+            )
+
+        input_text = read_input.read_text()
+
+        bad_count = input_text.count(_INPUT_BUFFER_BAD)
+        fixed_count = input_text.count(_INPUT_BUFFER_FIXED)
+
+        if bad_count == 1:
+            input_text = input_text.replace(
+                _INPUT_BUFFER_BAD,
+                _INPUT_BUFFER_FIXED,
+                1,
+            )
+            read_input.write_text(input_text)
+
+        elif bad_count == 0 and fixed_count == 1:
+            pass
+
+        else:
+            raise RuntimeError(
+                f"Unexpected input filename buffer structure for "
+                f"Plumeria {version}"
+            )
+
+        module1 = source_dir / "Module1.f90"
+
+        if not module1.is_file():
+            raise RuntimeError(
+                f"Module1.f90 not found for Plumeria {version}"
+            )
+
+        module_text = module1.read_text()
+
+        for bad, fixed, label in (
+            (
+                _OUTPUT_BUFFER_BAD,
+                _OUTPUT_BUFFER_FIXED,
+                "output filename buffer",
+            ),
+            (
+                _METFILE_BUFFER_BAD,
+                _METFILE_BUFFER_FIXED,
+                "metfile filename buffer",
+            ),
+        ):
+            bad_count = module_text.count(bad)
+            fixed_count = module_text.count(fixed)
+
+            if bad_count == 1:
+                module_text = module_text.replace(
+                    bad,
+                    fixed,
+                    1,
+                )
+            elif bad_count == 0 and fixed_count == 1:
+                pass
+            else:
+                raise RuntimeError(
+                    f"Unexpected {label} structure for "
+                    f"Plumeria {version}"
+                )
+
+        module1.write_text(module_text)
+
+        input_text = read_input.read_text()
+
+        for bad, fixed, label in (
+            (
+                _OUTPUT_READ_BAD,
+                _OUTPUT_READ_FIXED,
+                "output filename read",
+            ),
+            (
+                _METFILE_READ_BAD,
+                _METFILE_READ_FIXED,
+                "metfile filename read",
+            ),
+        ):
+            bad_count = input_text.count(bad)
+            fixed_count = input_text.count(fixed)
+
+            if bad_count == 1:
+                input_text = input_text.replace(
+                    bad,
+                    fixed,
+                    1,
+                )
+            elif bad_count == 0 and fixed_count == 1:
+                pass
+            else:
+                raise RuntimeError(
+                    f"Unexpected {label} structure for "
+                    f"Plumeria {version}"
+                )
+
+        read_input.write_text(input_text)
 
     return main_f90
 
