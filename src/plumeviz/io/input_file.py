@@ -25,6 +25,7 @@ class PlumeriaInput:
 
     wind_speed: float = 0.0
     wind_direction: float = 90.0
+    wind_slope: float | None = None
 
     vent_elevation: float = 0.0
     magma_specific_heat: float = 1000.0
@@ -33,6 +34,15 @@ class PlumeriaInput:
 
 def render_plumeria_input(config: PlumeriaInput) -> str:
     """Render one Plumeria WD input file."""
+    if config.wind_slope is None:
+        wind_line = f"{config.wind_speed}   {config.wind_direction}"
+    else:
+        wind_line = (
+            f"{config.wind_speed}   "
+            f"{config.wind_slope}   "
+            f"{config.wind_direction}"
+        )
+
     lines = [
         "#  Input file for the Fortran version of Plumeria.",
         "#  Lines that begin with a '#' are comment lines.",
@@ -54,7 +64,7 @@ def render_plumeria_input(config: PlumeriaInput) -> str:
         f"{config.tropopause_elevation}               #Elevation of tropopause (m asl)",
         f"{config.tropopause_thickness}               #Tropopause thickness, m",
         f"{config.upper_lapse_rate}               #thermal lapse rate above tropopause (K/m--should be positive)",
-        f"{config.wind_speed}   {config.wind_direction}          #wind speed, m/s, [optional wind slope, m/s per m], wind dir (deg. E of N)",
+        f"{wind_line}          #wind speed, m/s, [optional wind slope, m/s per m], wind dir (deg. E of N)",
         "",
         "#  Vent properties",
         "",
