@@ -1,6 +1,6 @@
 # PlumeViz
 
-[![DOI](https://zenodo.org/badge/818824604.svg)](https://doi.org/10.5281/zenodo.13685923)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13685923.svg)](https://doi.org/10.5281/zenodo.13685923)
 
 <div align="center">
 
