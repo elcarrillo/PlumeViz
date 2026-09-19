@@ -59,8 +59,46 @@ def run_adjusted_water_series(
         timeout=timeout,
     )
 
+    executed_dry_diameter = dry_diameter
+    dry_numerical_retry = False
+
     if not dry_result.ok:
-        raise RuntimeError("dry reference run failed")
+        output_text = dry_result.run.output_path.read_text(
+            errors="ignore"
+        )
+
+        if "stepsize is approximately zero" in output_text:
+            for label, retry_dry_diameter in (
+                ("plus", dry_diameter + 1.0e-4),
+                ("minus", dry_diameter - 1.0e-4),
+            ):
+                if retry_dry_diameter <= 0.0:
+                    continue
+
+                retry_dry_dir = workdir / f"dry_retry_{label}"
+
+                retry_dry_config = replace(
+                    base_config,
+                    output_path=retry_dry_dir / "output.txt",
+                    vent_diameter=retry_dry_diameter,
+                    added_water_fraction=0.0,
+                )
+
+                retry_dry_result = run_simulation(
+                    retry_dry_config,
+                    executable,
+                    retry_dry_dir / "input.inp",
+                    timeout=timeout,
+                )
+
+                if retry_dry_result.ok:
+                    dry_result = retry_dry_result
+                    executed_dry_diameter = retry_dry_diameter
+                    dry_numerical_retry = True
+                    break
+
+        if not dry_result.ok:
+            raise RuntimeError("dry reference run failed")
 
     dry_density = dry_result.values["mixture density (kg/m3)"]
     dry_mass_flux = dry_result.values["mass flux total (kg/s)"]
@@ -77,6 +115,8 @@ def run_adjusted_water_series(
             "input_path": str(dry_result.run.input_path),
             "output_path": str(dry_result.run.output_path),
             "dry reference diameter (m)": dry_diameter,
+            "executed dry diameter (m)": executed_dry_diameter,
+            "dry numerical retry": dry_numerical_retry,
             "adjusted vent diameter (m)": dry_diameter,
             "dry mixture density (kg/m3)": dry_density,
             "probe wet mixture density (kg/m3)": dry_density,
@@ -233,6 +273,8 @@ def run_adjusted_water_series(
                     "numerical retry": numerical_retry,
                     "vent diameter (m)": wet_diameter,
                     "dry reference diameter (m)": dry_diameter,
+                    "executed dry diameter (m)": executed_dry_diameter,
+                    "dry numerical retry": dry_numerical_retry,
                     "adjusted vent diameter (m)": wet_diameter,
                     "dry mixture density (kg/m3)": dry_density,
                     "probe wet mixture density (kg/m3)": wet_density,
@@ -267,6 +309,8 @@ def run_adjusted_water_series(
                 "input_path": str(adjusted_result.run.input_path),
                 "output_path": str(adjusted_result.run.output_path),
                 "dry reference diameter (m)": dry_diameter,
+                "executed dry diameter (m)": executed_dry_diameter,
+                "dry numerical retry": dry_numerical_retry,
                 "adjusted vent diameter (m)": wet_diameter,
                 "dry mixture density (kg/m3)": dry_density,
                 "probe wet mixture density (kg/m3)": wet_density,
@@ -327,6 +371,42 @@ def run_adjusted_water_sweep(
             probe_dir / "input.inp",
             timeout=timeout,
         )
+
+        if not probe_result.ok:
+            output_text = probe_result.run.output_path.read_text(
+                errors="ignore"
+            )
+
+            if "stepsize is approximately zero" in output_text:
+                for label, retry_probe_diameter in (
+                    ("plus", probe_diameter + 1.0e-4),
+                    ("minus", probe_diameter - 1.0e-4),
+                ):
+                    if retry_probe_diameter <= 0.0:
+                        continue
+
+                    retry_probe_dir = (
+                        probe_root
+                        / f"w_{index:03d}_retry_{label}"
+                    )
+
+                    retry_probe_config = replace(
+                        base_config,
+                        output_path=retry_probe_dir / "output.txt",
+                        vent_diameter=retry_probe_diameter,
+                        added_water_fraction=water_fraction,
+                    )
+
+                    retry_probe_result = run_simulation(
+                        retry_probe_config,
+                        executable,
+                        retry_probe_dir / "input.inp",
+                        timeout=timeout,
+                    )
+
+                    if retry_probe_result.ok:
+                        probe_result = retry_probe_result
+                        break
 
         if not probe_result.ok:
             raise RuntimeError(
