@@ -10,6 +10,358 @@ import pandas as pd
 from plumeviz.io.input_file import PlumeriaInput
 from plumeviz.simulation import run_simulation
 
+def adjusted_vent_diameter(
+    dry_diameter: float,
+    dry_density: float,
+    wet_density: float,
+    water_fraction: float,
+) -> float:
+
+    """calculate vent diameter at constant dry-equivalent mass flux"""
+    return dry_diameter * (
+        dry_density / (wet_density * (1.0 - water_fraction))) ** 0.5
+
+
+
+def run_adjusted_water_series(
+    base_config: PlumeriaInput,
+    dry_diameter: float,
+    water_fractions: Iterable[float],
+    executable: str | Path,
+    workdir: str | Path,
+    *,
+    probe_densities: dict[float, float] | None = None,
+    timeout: float = 1.0,
+) -> pd.DataFrame:
+    """run a water series at constant dry-equivalent mass flux"""
+
+    workdir = Path(workdir).expanduser()
+    workdir.mkdir(parents=True, exist_ok=True)
+
+    water_fractions = list(water_fractions)
+
+    if any(not 0.0 <= w < 1.0 for w in water_fractions):
+        raise ValueError("water fractions must satisfy 0 <= w < 1")
+
+    dry_dir = workdir / "dry"
+
+    dry_config = replace(
+        base_config,
+        output_path=dry_dir / "output.txt",
+        vent_diameter=dry_diameter,
+        added_water_fraction=0.0,
+    )
+
+    dry_result = run_simulation(
+        dry_config,
+        executable,
+        dry_dir / "input.inp",
+        timeout=timeout,
+    )
+
+    if not dry_result.ok:
+        raise RuntimeError("dry reference run failed")
+
+    dry_density = dry_result.values["mixture density (kg/m3)"]
+    dry_mass_flux = dry_result.values["mass flux total (kg/s)"]
+
+    rows: list[dict[str, Any]] = []
+
+    rows.append(
+        {
+            **dry_result.values,
+            "executed water fraction": 0.0,
+            "numerical retry": False,
+            "status": dry_result.run.status,
+            "returncode": dry_result.run.returncode,
+            "input_path": str(dry_result.run.input_path),
+            "output_path": str(dry_result.run.output_path),
+            "dry reference diameter (m)": dry_diameter,
+            "adjusted vent diameter (m)": dry_diameter,
+            "dry mixture density (kg/m3)": dry_density,
+            "probe wet mixture density (kg/m3)": dry_density,
+            "dry reference mass flux (kg/s)": dry_mass_flux,
+            "dry equivalent mass flux (kg/s)": dry_mass_flux,
+            "mass flux relative error": 0.0,
+        }
+    )
+
+    for index, water_fraction in enumerate(water_fractions, start=1):
+        if water_fraction == 0.0:
+            continue
+
+        adjusted_dir = workdir / f"w_{index:03d}_adjusted"
+
+        if probe_densities is None:
+            probe_dir = workdir / f"w_{index:03d}_probe"
+
+            probe_config = replace(
+                base_config,
+                output_path=probe_dir / "output.txt",
+                vent_diameter=dry_diameter,
+                added_water_fraction=water_fraction,
+            )
+
+            probe_result = run_simulation(
+                probe_config,
+                executable,
+                probe_dir / "input.inp",
+                timeout=timeout,
+            )
+
+            if not probe_result.ok:
+                raise RuntimeError(
+                    f"wet probe run failed for w={water_fraction}"
+                )
+
+            wet_density = probe_result.values[
+                "mixture density (kg/m3)"
+            ]
+        else:
+            try:
+                wet_density = probe_densities[water_fraction]
+            except KeyError as exc:
+                raise ValueError(
+                    f"missing probe density for w={water_fraction}"
+                ) from exc
+
+        wet_diameter = adjusted_vent_diameter(
+            dry_diameter,
+            dry_density,
+            wet_density,
+            water_fraction,
+        )
+
+        adjusted_config = replace(
+            base_config,
+            output_path=adjusted_dir / "output.txt",
+            vent_diameter=wet_diameter,
+            added_water_fraction=water_fraction,
+        )
+
+        adjusted_result = run_simulation(
+            adjusted_config,
+            executable,
+            adjusted_dir / "input.inp",
+            timeout=timeout,
+        )
+
+        executed_water_fraction = water_fraction
+        numerical_retry = False
+
+        if not adjusted_result.ok:
+            output_text = adjusted_result.run.output_path.read_text(
+                errors="ignore"
+            )
+
+            if "stepsize is approximately zero" in output_text:
+                for label, retry_water_fraction in (
+                    ("plus", water_fraction + 1.0e-4),
+                    ("minus", water_fraction - 1.0e-4),
+                ):
+                    if not 0.0 <= retry_water_fraction < 1.0:
+                        continue
+
+                    retry_probe_dir = (
+                        workdir
+                        / f"w_{index:03d}_retry_{label}_probe"
+                    )
+                    retry_adjusted_dir = (
+                        workdir
+                        / f"w_{index:03d}_retry_{label}_adjusted"
+                    )
+
+                    retry_probe_config = replace(
+                        base_config,
+                        output_path=retry_probe_dir / "output.txt",
+                        vent_diameter=dry_diameter,
+                        added_water_fraction=retry_water_fraction,
+                    )
+
+                    retry_probe_result = run_simulation(
+                        retry_probe_config,
+                        executable,
+                        retry_probe_dir / "input.inp",
+                        timeout=timeout,
+                    )
+
+                    if not retry_probe_result.ok:
+                        continue
+
+                    retry_wet_density = retry_probe_result.values[
+                        "mixture density (kg/m3)"
+                    ]
+
+                    retry_wet_diameter = adjusted_vent_diameter(
+                        dry_diameter,
+                        dry_density,
+                        retry_wet_density,
+                        retry_water_fraction,
+                    )
+
+                    retry_config = replace(
+                        base_config,
+                        output_path=retry_adjusted_dir / "output.txt",
+                        vent_diameter=retry_wet_diameter,
+                        added_water_fraction=retry_water_fraction,
+                    )
+
+                    retry_result = run_simulation(
+                        retry_config,
+                        executable,
+                        retry_adjusted_dir / "input.inp",
+                        timeout=timeout,
+                    )
+
+                    if retry_result.ok:
+                        adjusted_result = retry_result
+                        wet_density = retry_wet_density
+                        wet_diameter = retry_wet_diameter
+                        executed_water_fraction = retry_water_fraction
+                        numerical_retry = True
+                        break
+
+        if not adjusted_result.ok:
+            rows.append(
+                {
+                    "status": adjusted_result.run.status,
+                    "returncode": adjusted_result.run.returncode,
+                    "input_path": str(adjusted_result.run.input_path),
+                    "output_path": str(adjusted_result.run.output_path),
+                    "mass fraction water added": water_fraction,
+                    "executed water fraction": executed_water_fraction,
+                    "numerical retry": numerical_retry,
+                    "vent diameter (m)": wet_diameter,
+                    "dry reference diameter (m)": dry_diameter,
+                    "adjusted vent diameter (m)": wet_diameter,
+                    "dry mixture density (kg/m3)": dry_density,
+                    "probe wet mixture density (kg/m3)": wet_density,
+                    "dry reference mass flux (kg/s)": dry_mass_flux,
+                    "dry equivalent mass flux (kg/s)": float("nan"),
+                    "mass flux relative error": float("nan"),
+                    "calculated height (km)": float("nan"),
+                }
+            )
+            continue
+
+        total_mass_flux = adjusted_result.values[
+            "mass flux total (kg/s)"
+        ]
+
+        dry_equivalent_mass_flux = (
+            total_mass_flux * (1.0 - executed_water_fraction)
+        )
+
+        relative_error = (
+            dry_equivalent_mass_flux - dry_mass_flux
+        ) / dry_mass_flux
+
+        rows.append(
+            {
+                **adjusted_result.values,
+                "mass fraction water added": water_fraction,
+                "executed water fraction": executed_water_fraction,
+                "numerical retry": numerical_retry,
+                "status": adjusted_result.run.status,
+                "returncode": adjusted_result.run.returncode,
+                "input_path": str(adjusted_result.run.input_path),
+                "output_path": str(adjusted_result.run.output_path),
+                "dry reference diameter (m)": dry_diameter,
+                "adjusted vent diameter (m)": wet_diameter,
+                "dry mixture density (kg/m3)": dry_density,
+                "probe wet mixture density (kg/m3)": wet_density,
+                "dry reference mass flux (kg/s)": dry_mass_flux,
+                "dry equivalent mass flux (kg/s)": dry_equivalent_mass_flux,
+                "mass flux relative error": relative_error,
+            }
+        )
+
+    return pd.DataFrame(rows)
+
+def run_adjusted_water_sweep(
+    base_config: PlumeriaInput,
+    dry_diameters: Iterable[float],
+    water_fractions: Iterable[float],
+    executable: str | Path,
+    workdir: str | Path,
+    *,
+    timeout: float = 1.0,
+) -> pd.DataFrame:
+    """run adjusted water series across multiple dry vent diameters"""
+
+    workdir = Path(workdir).expanduser()
+    workdir.mkdir(parents=True, exist_ok=True)
+
+    dry_diameters = list(dry_diameters)
+    water_fractions = list(water_fractions)
+
+    if not dry_diameters:
+        raise ValueError("dry diameters cannot be empty")
+
+    if any(not 0.0 <= w < 1.0 for w in water_fractions):
+        raise ValueError("water fractions must satisfy 0 <= w < 1")
+
+    probe_densities: dict[float, float] = {}
+    probe_diameter = dry_diameters[0]
+    probe_root = workdir / "probes"
+
+    for index, water_fraction in enumerate(
+        water_fractions,
+        start=1,
+    ):
+        if water_fraction == 0.0:
+            continue
+
+        probe_dir = probe_root / f"w_{index:03d}"
+
+        probe_config = replace(
+            base_config,
+            output_path=probe_dir / "output.txt",
+            vent_diameter=probe_diameter,
+            added_water_fraction=water_fraction,
+        )
+
+        probe_result = run_simulation(
+            probe_config,
+            executable,
+            probe_dir / "input.inp",
+            timeout=timeout,
+        )
+
+        if not probe_result.ok:
+            raise RuntimeError(
+                f"wet probe run failed for w={water_fraction}"
+            )
+
+        probe_densities[water_fraction] = (
+            probe_result.values["mixture density (kg/m3)"]
+        )
+
+    frames: list[pd.DataFrame] = []
+
+    for index, dry_diameter in enumerate(
+        dry_diameters,
+        start=1,
+    ):
+        diameter_dir = workdir / f"diameter_{index:04d}"
+
+        results = run_adjusted_water_series(
+            base_config=base_config,
+            dry_diameter=dry_diameter,
+            water_fractions=water_fractions,
+            executable=executable,
+            workdir=diameter_dir,
+            probe_densities=probe_densities,
+            timeout=timeout,
+        )
+
+        frames.append(results)
+
+    return pd.concat(
+        frames,
+        ignore_index=True,
+    )
+
 
 def run_sweep(
     base_config: PlumeriaInput,
