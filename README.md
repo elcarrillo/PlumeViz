@@ -1,6 +1,9 @@
 # PlumeViz
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13685923.svg)](https://doi.org/10.5281/zenodo.13685923)
+[![Launch PlumeViz](https://img.shields.io/badge/Launch-PlumeViz-FF4B4B?logo=streamlit&logoColor=white)](https://plumeviz.streamlit.app/)
+
+**Live web app:** https://plumeviz.streamlit.app/
 
 <div align="center">
 
@@ -204,7 +207,11 @@ Only the requested parameters and output location are modified. Other records in
 
 ## Web Interface
 
-Install the web dependencies:
+Use the hosted PlumeViz interface at:
+
+https://plumeviz.streamlit.app/
+
+To run the interface locally, install the web dependencies:
 
 ```bash
 python -m pip install -e '.[web]'
