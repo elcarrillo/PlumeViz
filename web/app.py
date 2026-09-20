@@ -250,27 +250,33 @@ def show_results(values: dict[str, float]) -> None:
     )
 
 
+@st.cache_resource(show_spinner=False)
+def ensure_plumeria_executable() -> Path:
+    executable = find_plumeria_executable()
+
+    if executable is not None:
+        return executable
+
+    return build_plumeria()
+
+
 st.title("PlumeViz")
 st.caption("Plumeria volcanic plume simulations")
 
-executable = find_plumeria_executable()
+try:
+    with st.spinner("Preparing Plumeria engine"):
+        executable = ensure_plumeria_executable()
+except RuntimeError as exc:
+    executable = None
+    st.error(f"Plumeria engine setup failed: {exc}")
 
 with st.sidebar:
     st.header("Plumeria Engine")
 
     if executable is None:
-        st.warning("Plumeria is not installed")
-
-        if st.button("Install Plumeria"):
-            with st.spinner("Installing Plumeria"):
-                executable = build_plumeria()
-
-            st.success("Plumeria installed")
-            st.rerun()
-
+        st.error("Plumeria engine unavailable")
     else:
         st.success("Plumeria 3.0.0 ready")
-        st.code(str(executable))
 
 single_tab, sweep_tab = st.tabs(
     [
